@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masan Property — Premium Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --border: #222222;
+    --gold: #c9a96e;
+    --gold-light: #e8c99a;
+    --text: #e8e2d9;
+    --muted: #6b6560;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 48px;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    backdrop-filter: blur(4px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.97);
+    border-bottom-color: var(--border);
+  }
+  .logo {
+    display: inline-block; text-decoration: none;
+  }
+  .logo img {
+    height: 110px; width: auto;
+    filter: brightness(1.3) contrast(1.2);
+    transition: opacity 0.2s;
+  }
+  .logo img:hover { opacity: 0.85; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--bg);
+    padding: 10px 24px; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 500;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 0 48px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,169,110,0.07) 0%, transparent 60%),
+      linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(rgba(201,169,110,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,169,110,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content { position: relative; max-width: 700px; }
+  .hero-tag {
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 28px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-tag::before {
+    content: ''; width: 40px; height: 1px; background: var(--gold);
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 88px);
+    font-weight: 300; line-height: 1.05;
+    color: var(--white); margin-bottom: 28px;
+  }
+  h1 em { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-size: 15px; line-height: 1.7; color: var(--muted);
+    max-width: 480px; margin-bottom: 48px;
+  }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--bg);
+    padding: 16px 36px; font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 500;
+    text-decoration: none; transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline {
+    border: 1px solid var(--border); color: var(--text);
+    padding: 16px 36px; font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 500;
+    text-decoration: none; transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  .hero-stats {
+    position: absolute; right: 48px; bottom: 80px;
+    display: flex; gap: 48px;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px; color: var(--gold); display: block;
+  }
+  .stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 100px 48px; }
+  .section-tag {
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px); font-weight: 300;
+    color: var(--white); margin-bottom: 20px; line-height: 1.15;
+  }
+  h2 em { color: var(--gold); font-style: italic; }
+
+  /* ── LISTINGS ── */
+  #listings { background: var(--surface); }
+  .listings-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px; flex-wrap: wrap; gap: 20px; }
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 8px 20px; font-size: 11px; letter-spacing: 1.5px;
+    text-transform: uppercase; border: 1px solid var(--border);
+    background: none; color: var(--muted); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    border-color: var(--gold); color: var(--gold); background: rgba(201,169,110,0.05);
+  }
+
+  .listings-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  .property-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    overflow: hidden; transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+  }
+  .property-card:hover { transform: translateY(-6px); border-color: var(--gold); }
+  .card-img {
+    height: 240px; position: relative; overflow: hidden;
+    background: var(--bg);
+  }
+  .card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s;
+    filter: brightness(0.85);
+  }
+  .property-card:hover .card-img img { transform: scale(1.06); filter: brightness(1); }
+  .card-badge {
+    position: absolute; top: 16px; left: 16px;
+    background: var(--gold); color: var(--bg);
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 12px; font-weight: 500;
+  }
+  .card-price {
+    position: absolute; bottom: 16px; right: 16px;
+    background: rgba(10,10,10,0.85);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--gold);
+    padding: 6px 14px; backdrop-filter: blur(4px);
+  }
+  .card-body { padding: 24px; }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--white); margin-bottom: 8px;
+  }
+  .card-location { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .card-features { display: flex; gap: 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+  .feature { font-size: 12px; color: var(--muted); }
+  .feature span { display: block; color: var(--text); font-size: 13px; font-weight: 500; }
+
+  /* placeholder images using CSS gradients */
+  .img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+  .p1 { background: linear-gradient(135deg, #1a1610 0%, #2a2018 50%, #1c1a10 100%); }
+  .p2 { background: linear-gradient(135deg, #0f1520 0%, #1a2535 50%, #101820 100%); }
+  .p3 { background: linear-gradient(135deg, #150f10 0%, #251520 50%, #180f15 100%); }
+  .p4 { background: linear-gradient(135deg, #0f150f 0%, #1a251a 50%, #101810 100%); }
+  .p5 { background: linear-gradient(135deg, #15100a 0%, #25180a 50%, #181008 100%); }
+  .p6 { background: linear-gradient(135deg, #100f15 0%, #181525 50%, #100f18 100%); }
+  .img-icon { font-size: 48px; opacity: 0.25; }
+
+  /* ── INSTAGRAM ── */
+  #instagram { background: var(--bg); }
+  .ig-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px; flex-wrap: wrap; gap: 20px; }
+  .ig-handle {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; color: var(--gold); text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .ig-handle:hover { opacity: 0.7; }
+  .ig-icon { font-size: 20px; }
+
+  .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .ig-item {
+    aspect-ratio: 1; position: relative; overflow: hidden;
+    cursor: pointer;
+  }
+  .ig-item .ig-bg { width: 100%; height: 100%; transition: transform 0.4s; }
+  .ig-item:hover .ig-bg { transform: scale(1.08); }
+  .ig-overlay {
+    position: absolute; inset: 0;
+    background: rgba(10,10,10,0.6);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 6px;
+  }
+  .ig-item:hover .ig-overlay { opacity: 1; }
+  .ig-overlay-text { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--white); }
+
+  .ig1 { background: linear-gradient(135deg, #1a1210 0%, #2a1e15 100%); }
+  .ig2 { background: linear-gradient(135deg, #101520 0%, #1a2030 100%); }
+  .ig3 { background: linear-gradient(135deg, #101510 0%, #1a2218 100%); }
+  .ig4 { background: linear-gradient(135deg, #15100a 0%, #251808 100%); }
+  .ig5 { background: linear-gradient(135deg, #100f1a 0%, #1a1828 100%); }
+  .ig6 { background: linear-gradient(135deg, #1a1010 0%, #2a1618 100%); }
+
+  .ig-cta { margin-top: 40px; text-align: center; }
+
+  /* ── ABOUT ── */
+  #about { background: var(--surface); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-visual {
+    position: relative; aspect-ratio: 4/5;
+  }
+  .about-img {
+    width: 100%; height: 100%;
+    background: linear-gradient(145deg, #151210 0%, #251e18 50%, #1a1510 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px; opacity: 0.3;
+    border: 1px solid var(--border);
+  }
+  .about-accent {
+    position: absolute; bottom: -24px; right: -24px;
+    width: 160px; height: 160px;
+    border: 1px solid var(--gold); opacity: 0.3;
+  }
+  .about-accent2 {
+    position: absolute; top: -24px; left: -24px;
+    width: 80px; height: 80px;
+    background: rgba(201,169,110,0.06);
+    border: 1px solid rgba(201,169,110,0.2);
+  }
+  .about-text p {
+    font-size: 15px; line-height: 1.8; color: var(--muted); margin-bottom: 20px;
+  }
+  .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 36px 0; }
+  .about-feat {
+    padding: 20px; border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+  }
+  .about-feat strong { display: block; color: var(--white); font-size: 13px; margin-bottom: 4px; letter-spacing: 0.5px; }
+  .about-feat span { font-size: 12px; color: var(--muted); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .contact-info { padding-top: 16px; }
+  .contact-info p { font-size: 15px; line-height: 1.8; color: var(--muted); margin-bottom: 40px; }
+  .contact-items { display: flex; flex-direction: column; gap: 28px; }
+  .contact-item { display: flex; gap: 20px; align-items: flex-start; }
+  .contact-icon {
+    width: 44px; height: 44px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0; color: var(--gold);
+  }
+  .contact-item-text strong { display: block; color: var(--white); font-size: 13px; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .contact-item-text span { font-size: 14px; color: var(--muted); }
+  .wa-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #25D366; color: var(--bg);
+    padding: 14px 28px; font-size: 12px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 500;
+    text-decoration: none; margin-top: 36px;
+    transition: all 0.2s;
+  }
+  .wa-btn:hover { background: #20c05a; transform: translateY(-2px); }
+
+  .contact-form { background: var(--surface); padding: 48px; border: 1px solid var(--border); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .form-group label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .form-group input, .form-group select, .form-group textarea {
+    background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); padding: 14px 16px; font-family: 'DM Sans', sans-serif;
+    font-size: 14px; transition: border-color 0.2s;
+    outline: none; resize: vertical;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-group select option { background: var(--bg); }
+  .form-submit {
+    width: 100%; background: var(--gold); color: var(--bg);
+    padding: 16px; font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 500;
+    border: none; cursor: pointer; margin-top: 8px;
+    transition: all 0.2s;
+  }
+  .form-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 48px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px; align-items: start;
+  }
+  .footer-brand .logo { display: block; margin-bottom: 16px; }
+  .footer-brand .logo img { height: 110px; filter: brightness(1.3) contrast(1.2); }
+  .footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .footer-links h4 {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-social h4 {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .social-links { display: flex; gap: 12px; }
+  .social-link {
+    width: 40px; height: 40px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; color: var(--muted); font-size: 16px;
+    transition: all 0.2s;
+  }
+  .social-link:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-bottom {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { font-size: 12px; color: var(--muted); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    section { padding: 70px 24px; }
+    #home { padding: 0 24px; }
+    .hero-stats { display: none; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .ig-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { grid-template-columns: 1fr; padding: 40px 24px; }
+    .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    .listings-header { flex-direction: column; align-items: flex-start; }
+    .form-row { grid-template-columns: 1fr; }
+    .contact-form { padding: 28px; }
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up:nth-child(2) { transition-delay: 0.1s; }
+  .fade-up:nth-child(3) { transition-delay: 0.2s; }
+  .fade-up:nth-child(4) { transition-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="logo"><img src="Masan_Property_Sample_Design.png" alt="Masan Property"></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#listings">Listings</a></li>
+    <li><a href="#instagram">Instagram</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://wa.me/254731689067" target="_blank" class="nav-cta">WhatsApp Us</a>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Premium Real Estate</div>
+    <h1>Find Your <em>Perfect</em><br>Property</h1>
+    <p class="hero-sub">Masan Property curates the finest residential and commercial listings. Follow our daily updates on Instagram and discover your next home or investment.</p>
+    <div class="hero-btns">
+      <a href="#listings" class="btn-primary">View Listings</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">120+</span>
+      <span class="stat-label">Properties Listed</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">98%</span>
+      <span class="stat-label">Happy Clients</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5+</span>
+      <span class="stat-label">Years Experience</span>
+    </div>
+  </div>
+</section>
+
+<!-- LISTINGS -->
+<section id="listings">
+  <div class="listings-header">
+    <div>
+      <div class="section-tag fade-up">Latest Listings</div>
+      <h2 class="fade-up">Featured <em>Properties</em></h2>
+    </div>
+    <div class="filter-bar fade-up">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">For Sale</button>
+      <button class="filter-btn">For Rent</button>
+      <button class="filter-btn">Commercial</button>
+    </div>
+  </div>
+
+  <div class="listings-grid">
+    <!-- Card 1 -->
+    <div class="property-card fade-up">
+      <div class="card-img">
+        <div class="img-placeholder p1"><span class="img-icon">🏠</span></div>
+        <span class="card-badge">For Sale</span>
+        <span class="card-price">KES 12M</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Modern 4BR Villa</div>
+        <div class="card-location">📍 Westlands, Nairobi</div>
+        <div class="card-features">
+          <div class="feature"><span>4</span>Bedrooms</div>
+          <div class="feature"><span>3</span>Bathrooms</div>
+          <div class="feature"><span>280m²</span>Area</div>
+        </div>
+      </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="property-card fade-up">
+      <div class="card-img">
+        <div class="img-placeholder p2"><span class="img-icon">🏢</span></div>
+        <span class="card-badge">For Rent</span>
+        <span class="card-price">KES 85K/mo</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Executive 3BR Apartment</div>
+        <div class="card-location">📍 Kilimani, Nairobi</div>
+        <div class="card-features">
+          <div class="feature"><span>3</span>Bedrooms</div>
+          <div class="feature"><span>2</span>Bathrooms</div>
+          <div class="feature"><span>150m²</span>Area</div>
+        </div>
+      </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="property-card fade-up">
+      <div class="card-img">
+        <div class="img-placeholder p3"><span class="img-icon">🏡</span></div>
+        <span class="card-badge">For Sale</span>
+        <span class="card-price">KES 28M</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">5BR Family Home</div>
+        <div class="card-location">📍 Karen, Nairobi</div>
+        <div class="card-features">
+          <div class="feature"><span>5</span>Bedrooms</div>
+          <div class="feature"><span>4</span>Bathrooms</div>
+          <div class="feature"><span>450m²</span>Area</div>
+        </div>
+      </div>
+    </div>
+    <!-- Card 4 -->
+    <div class="property-card fade-up">
+      <div class="card-img">
+        <div class="img-placeholder p4"><span class="img-icon">🏘️</span></div>
+        <span class="card-badge">For Rent</span>
+        <span class="card-price">KES 45K/mo</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">2BR Serviced Studio</div>
+        <div class="card-location">📍 Lavington, Nairobi</div>
+        <div class="card-features">
+          <div class="feature"><span>2</span>Bedrooms</div>
+          <div class="feature"><span>2</span>Bathrooms</div>
+          <div class="feature"><span>90m²</span>Area</div>
+        </div>
+      </div>
+    </div>
+    <!-- Card 5 -->
+    <div class="property-card fade-up">
+      <div class="card-img">
+        <div class="img-placeholder p5"><span class="img-icon">🏬</span></div>
+        <span class="card-badge">Commercial</span>
+        <span class="card-price">KES 120K/mo</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Prime Office Space</div>
+        <div class="card-location">📍 Upper Hill, Nairobi</div>
+        <div class="card-features">
+          <div class="feature"><span>Open</span>Plan</div>
+          <div class="feature"><span>2</span>Floors</div>
+          <div class="feature"><span>500m²</span>Area</div>
+        </div>
+      </div>
+    </div>
+    <!-- Card 6 -->
+    <div class="property-card fade-up">
+      <div class="card-img">
+        <div class="img-placeholder p6"><span class="img-icon">🏠</span></div>
+        <span class="card-badge">For Sale</span>
+        <span class="card-price">KES 8.5M</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">Compact 3BR Maisonette</div>
+        <div class="card-location">📍 Ruaka, Nairobi</div>
+        <div class="card-features">
+          <div class="feature"><span>3</span>Bedrooms</div>
+          <div class="feature"><span>2</span>Bathrooms</div>
+          <div class="feature"><span>120m²</span>Area</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section id="instagram">
+  <div class="ig-header">
+    <div>
+      <div class="section-tag fade-up">Social Feed</div>
+      <h2 class="fade-up">Daily Listings on <em>Instagram</em></h2>
+    </div>
+    <a href="https://instagram.com/masanproperty" target="_blank" class="ig-handle fade-up">
+      <span class="ig-icon">📸</span> @masanproperty
+    </a>
+  </div>
+
+  <div class="ig-grid">
+    <div class="ig-item">
+      <div class="ig-bg ig1" style="height:100%;"></div>
+      <div class="ig-overlay">
+        <span class="ig-icon" style="font-size:28px;color:white;">🏠</span>
+        <span class="ig-overlay-text">View Post</span>
+      </div>
+    </div>
+    <div class="ig-item">
+      <div class="ig-bg ig2" style="height:100%;"></div>
+      <div class="ig-overlay">
+        <span class="ig-icon" style="font-size:28px;color:white;">🏢</span>
+        <span class="ig-overlay-text">View Post</span>
+      </div>
+    </div>
+    <div class="ig-item">
+      <div class="ig-bg ig3" style="height:100%;"></div>
+      <div class="ig-overlay">
+        <span class="ig-icon" style="font-size:28px;color:white;">🏡</span>
+        <span class="ig-overlay-text">View Post</span>
+      </div>
+    </div>
+    <div class="ig-item">
+      <div class="ig-bg ig4" style="height:100%;"></div>
+      <div class="ig-overlay">
+        <span class="ig-icon" style="font-size:28px;color:white;">🏘️</span>
+        <span class="ig-overlay-text">View Post</span>
+      </div>
+    </div>
+    <div class="ig-item">
+      <div class="ig-bg ig5" style="height:100%;"></div>
+      <div class="ig-overlay">
+        <span class="ig-icon" style="font-size:28px;color:white;">🌆</span>
+        <span class="ig-overlay-text">View Post</span>
+      </div>
+    </div>
+    <div class="ig-item">
+      <div class="ig-bg ig6" style="height:100%;"></div>
+      <div class="ig-overlay">
+        <span class="ig-icon" style="font-size:28px;color:white;">🏬</span>
+        <span class="ig-overlay-text">View Post</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ig-cta">
+    <a href="https://instagram.com/masanproperty" target="_blank" class="btn-outline">Follow @masanproperty for Daily Listings →</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-img">🏙️</div>
+      <div class="about-accent"></div>
+      <div class="about-accent2"></div>
+    </div>
+    <div class="about-text">
+      <div class="section-tag fade-up">Our Story</div>
+      <h2 class="fade-up">Trusted by <em>Thousands</em> of Clients</h2>
+      <p class="fade-up">Masan Property is a leading real estate platform dedicated to connecting buyers, sellers, and renters with the finest properties across Kenya. We post daily listings on Instagram and offer a seamless experience from browsing to closing.</p>
+      <p class="fade-up">Our team of experienced agents understands the local market deeply and is committed to finding you the perfect match — whether it's your dream home or a high-yield investment.</p>
+      <div class="about-features fade-up">
+        <div class="about-feat">
+          <strong>Verified Listings</strong>
+          <span>Every property is personally verified by our team</span>
+        </div>
+        <div class="about-feat">
+          <strong>Expert Agents</strong>
+          <span>Dedicated professionals to guide your journey</span>
+        </div>
+        <div class="about-feat">
+          <strong>Daily Updates</strong>
+          <span>New listings posted every day on Instagram</span>
+        </div>
+        <div class="about-feat">
+          <strong>Fast Response</strong>
+          <span>WhatsApp us anytime for quick answers</span>
+        </div>
+      </div>
+      <a href="#contact" class="btn-primary fade-up">Work With Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="section-tag fade-up">Get In Touch</div>
+      <h2 class="fade-up">Let's Find Your <em>Dream</em> Property</h2>
+      <p class="fade-up">Reach out to our team for personalized property advice, viewings, or any inquiries about our listings.</p>
+      <div class="contact-items fade-up">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-item-text">
+            <strong>Office Address</strong>
+            <span>Nairobi, Kenya</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-item-text">
+            <strong>Phone / WhatsApp</strong>
+            <span>+254 700 000 000</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-item-text">
+            <strong>Email</strong>
+            <span>info@masanproperty.com</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📸</div>
+          <div class="contact-item-text">
+            <strong>Instagram</strong>
+            <span>@masanproperty</span>
+          </div>
+        </div>
+      </div>
+      <a href="https://wa.me/254731689067" target="_blank" class="wa-btn">
+        💬 Chat on WhatsApp
+      </a>
+    </div>
+
+    <div class="contact-form fade-up">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--white);margin-bottom:32px;font-weight:300;">Send Us a Message</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="John">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Doe">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="john@example.com">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+254 700 000 000">
+      </div>
+      <div class="form-group">
+        <label>I'm Interested In</label>
+        <select>
+          <option>Buying a Property</option>
+          <option>Renting a Property</option>
+          <option>Selling a Property</option>
+          <option>Commercial Property</option>
+          <option>General Enquiry</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="4" placeholder="Tell us what you're looking for..."></textarea>
+      </div>
+      <button class="form-submit" onclick="handleSubmit(event)">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <a href="#home" class="logo"><img src="Masan_Property_Sample_Design.png" alt="Masan Property"></a>
+    <p>Curating the finest properties in Kenya. Follow us on Instagram for daily listings and updates.</p>
+  </div>
+  <div class="footer-links">
+    <h4>Quick Links</h4>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#listings">Listings</a></li>
+      <li><a href="#instagram">Instagram</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+  <div class="footer-social">
+    <h4>Follow Us</h4>
+    <div class="social-links">
+      <a href="https://instagram.com/masanproperty" target="_blank" class="social-link">📸</a>
+      <a href="https://wa.me/254731689067" target="_blank" class="social-link">💬</a>
+      <a href="mailto:info@masanproperty.com" class="social-link">✉️</a>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:20px;line-height:1.6;">Daily property listings.<br>New homes posted every day.</p>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2026 Masan Property. All rights reserved.</p>
+  <p>Built with care for Kenya's real estate market.</p>
+</div>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Form submission
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target;
+    btn.textContent = '✓ Message Sent!';
+    btn.style.ba
